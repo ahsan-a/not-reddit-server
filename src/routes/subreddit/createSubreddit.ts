@@ -5,7 +5,7 @@ import { firebase, firestore } from '../../firebase';
 import { verifyValues, error } from '../../utils';
 
 router.post('/', async (req, res): Promise<any> => {
-	let verifyStatus = verifyValues(req.body, ['name', 'description', 'user_id'], ['image']);
+	let verifyStatus = verifyValues(req.body, ['name', 'description', 'user_id', 'id_token'], ['image']);
 
 	if (!verifyStatus.success) return res.send(verifyStatus);
 
@@ -26,6 +26,14 @@ router.post('/', async (req, res): Promise<any> => {
 	// user checking
 	const user = await firestore.collection('users').doc(req.body.user_id).get();
 	if (!user.exists) return error(res, "This user doesn't exist.");
+
+	try {
+		const token = await firebase.auth().verifyIdToken(req.body.id_token);
+		const uid = token.uid;
+		if (uid !== req.body.user_id) return error(res, 'wtf');
+	} catch (e) {
+		return error(res, 'An error occurred.');
+	}
 
 	const subreddit = firestore.collection('subreddits').doc();
 	const subredditSet: {
