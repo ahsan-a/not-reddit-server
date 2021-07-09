@@ -1,12 +1,12 @@
-import * as admin from 'firebase-admin';
+import * as firebase from 'firebase-admin';
 
 const serviceAccount = JSON.parse(process.env.serviceKey || '{}');
 if (!Object.keys(serviceAccount).length) process.exit(1);
 
-admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
+firebase.initializeApp({
+	credential: firebase.credential.cert(serviceAccount),
 });
 
-const firestore = admin.firestore();
+const firestore = firebase.firestore();
 
-export { firestore };
+export { firebase, firestore };

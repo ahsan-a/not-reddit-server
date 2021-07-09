@@ -1,11 +1,56 @@
 import { Router } from 'express';
 const router = Router();
 
-import { firestore } from '@/firebase';
-import { verifyValues } from '@/utils';
+import { firebase, firestore } from '../../firebase';
+import { verifyValues, error } from '../../utils';
 
-router.post('/', (req, res) => {
-	res.send(typeof req.body.approved);
+router.post('/', async (req, res): Promise<any> => {
+	let verifyStatus = verifyValues(req.body, ['name', 'description', 'user_id'], ['image']);
+
+	if (!verifyStatus.success) return res.send(verifyStatus);
+
+	//long validation
+	if (!/^[0-9a-zA-Z_]+$/.test(req.body.name))
+		return error(res, 'Your title must only contain alphanumeric characters and underscores, without spaces.');
+
+	if (req.body.name.length > 25 || req.body.name.length < 1) return error(res, 'Your subreddit name must not be over 25 letters long, or under 1.');
+	if (req.body.description.length > 150 || req.body.description.length < 5)
+		return error(res, 'Your description must not be over 150 letters long, or under 5.');
+	if (!req.body.description.replace(/\s/g, '').length) return error(res, 'Your description must not be empty.');
+	if (req.body.image !== undefined && !/^https:\/\//gi.test(req.body.image)) return error(res, `Your image must be an https link.`);
+
+	// subreddit existance checking
+	const dbSubredditExists = await firestore.collection('subreddits').where('name_lowercase', '==', req.body.name.toLowerCase()).get();
+	if (!dbSubredditExists.empty) return error(res, `r/${req.body.name} already exists.`);
+
+	// user checking
+	const user = await firestore.collection('users').doc(req.body.user_id).get();
+	if (!user.exists) return error(res, "This user doesn't exist.");
+
+	const subreddit = firestore.collection('subreddits').doc();
+	const subredditSet: {
+		approved: boolean;
+		created_at: firebase.firestore.FieldValue;
+		name: string;
+		name_lowercase: string;
+		id: string;
+		description: string;
+		user_id: string;
+		image?: string;
+	} = {
+		approved: false,
+		created_at: firebase.firestore.FieldValue.serverTimestamp(),
+		name: req.body.name.replace(/\s/g, ''),
+		name_lowercase: req.body.name.replace(/\s/g, '').toLowerCase(),
+		id: subreddit.id,
+		description: req.body.description,
+		user_id: req.body.user_id,
+	};
+
+	if (req.body.image) subredditSet.image = req.body.image;
+
+	await subreddit.set(subredditSet);
+	res.send({ success: true });
 });
 
 export default router;
