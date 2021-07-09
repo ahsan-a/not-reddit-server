@@ -2,12 +2,21 @@ import { Router } from 'express';
 const router = Router();
 
 import { firebase, firestore } from '../../firebase';
-import { verifyValues, error } from '../../utils';
+import { verifyValues, error, verifyLogin } from '../../utils';
 
 router.post('/', async (req, res): Promise<any> => {
 	let verifyStatus = verifyValues(req.body, ['name', 'description', 'user_id', 'id_token'], ['image']);
-
 	if (!verifyStatus.success) return res.send(verifyStatus);
+
+	const verifiedUser = await verifyLogin(req.body.id_token, req.body.user_id);
+	if (!verifiedUser.success) {
+		switch (verifiedUser.type) {
+			case 0:
+				return error(res, 'wtf');
+			case 1:
+				return error(res, 'An error occurred.');
+		}
+	}
 
 	//long validation
 	if (!/^[0-9a-zA-Z_]+$/.test(req.body.name))
@@ -26,14 +35,6 @@ router.post('/', async (req, res): Promise<any> => {
 	// user checking
 	const user = await firestore.collection('users').doc(req.body.user_id).get();
 	if (!user.exists) return error(res, "This user doesn't exist.");
-
-	try {
-		const token = await firebase.auth().verifyIdToken(req.body.id_token);
-		const uid = token.uid;
-		if (uid !== req.body.user_id) return error(res, 'wtf');
-	} catch (e) {
-		return error(res, 'An error occurred.');
-	}
 
 	const subreddit = firestore.collection('subreddits').doc();
 	const subredditSet: {

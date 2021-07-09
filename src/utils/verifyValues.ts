@@ -5,7 +5,7 @@ interface Verify {
 /** Verifies that the data object has all of the keys in the required */
 function verifyValues(data: Verify, required: string[], optional?: string[]) {
 	const dataKeys = Object.keys(data);
-	const allowed = optional ? required.concat(optional) : undefined;
+	const allowed = optional ? required.concat(optional) : required;
 
 	if (!required.every((x) => dataKeys.includes(x)))
 		return {
@@ -13,7 +13,7 @@ function verifyValues(data: Verify, required: string[], optional?: string[]) {
 			error: 'Data is missing required keys.',
 		};
 
-	if (optional && !dataKeys.every((x) => allowed?.includes(x)))
+	if (allowed && !dataKeys.every((x) => allowed?.includes(x)))
 		return {
 			success: false,
 			error: 'Data has extra illegal keys.',
