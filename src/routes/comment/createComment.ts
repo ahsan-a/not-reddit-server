@@ -19,7 +19,7 @@ router.post('/', async (req, res): Promise<any> => {
 		}
 	}
 
-	// long verif again
+	// verification
 	if (req.body.content.replace(/\s/g, '').length < 1) return error('Your comment is too short.');
 
 	if (req.body.parent_id !== null && !(await firestore.collection('comments').doc(req.body.parent_id).get()).exists)
