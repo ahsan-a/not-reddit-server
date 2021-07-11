@@ -21,4 +21,6 @@ app.use(bodyParser.json());
 
 app.use(routes);
 
-const server = app.listen(5000, () => console.log('server up'));
+const server = app.listen(5000, () => {
+	console.log('Server listening on port 5000');
+});

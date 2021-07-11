@@ -1,5 +1,5 @@
 import verifyValues from './verifyValues';
 import verifyLogin from './verifyLogin';
-import error from './error';
+import Error from './Error';
 
-export { verifyValues, error, verifyLogin };
+export { verifyValues, Error, verifyLogin };
