@@ -14,5 +14,7 @@
 		"paths": {
 			"@/*": ["./*"] // This mapping is relative to "baseUrl"
 		}
-	}
+		// "moduleResolution": "node",
+	},
+	"include": ["src/**/*.ts"]
 }
