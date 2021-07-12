@@ -24,7 +24,7 @@ router.post('/', async (req, res): Promise<any> => {
 	if (!req.body.title.replace(/\s/g, '').length && req.body.title.length < 100)
 		return error('Your title must not be blank and be shorter than 100 characters.');
 
-	if (typeof req.body.content !== 'string') return error('Your body is not a string. (?!?!?!???)');
+	if (typeof req.body.content !== 'string') return error('Your content is not a string. (?!?!?!???)');
 
 	const subreddit = await firestore.collection('subreddits').doc(req.body.subreddit_id).get();
 	if (!subreddit.exists) return error("This subreddit doesn't exist.");
