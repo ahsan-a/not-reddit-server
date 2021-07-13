@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "bin/index.js",
 	"scripts": {
-		"build": "tsc",
-		"start": "node .",
+		"start": "ts-node ./src",
 		"test": "npm run build",
 		"dev": "nodemon"
 	},
@@ -35,7 +34,8 @@
 		"express": "^4.17.1",
 		"firebase-admin": "^9.10.0",
 		"morgan": "^1.10.0",
-		"node-fetch": "^2.6.1"
+		"node-fetch": "^2.6.1",
+		"ts-node": "^10.1.0"
 	},
 	"engines": {
 		"node": ">=15.4.0",
