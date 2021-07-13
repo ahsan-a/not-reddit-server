@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 
 app.use(routes);
 
-const port = parseInt(process.env.port || '3000');
+const port = process.env.PORT || 5000;
 
 const server = app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
