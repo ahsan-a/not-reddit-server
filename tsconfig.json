@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "commonjs",
+		"module": "ESNext",
 		"lib": ["es6", "dom"],
 		"declaration": true,
 		"outDir": "bin",
@@ -11,10 +11,7 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"baseUrl": "src",
-		"paths": {
-			"@/*": ["./*"] // This mapping is relative to "baseUrl"
-		}
-		// "moduleResolution": "node",
+		"moduleResolution": "node"
 	},
 	"include": ["src/**/*.ts"]
 }
