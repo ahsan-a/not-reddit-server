@@ -10,8 +10,7 @@
 		"types": ["node", "express"],
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"baseUrl": "src",
-		"moduleResolution": "node"
+		"baseUrl": "src"
 	},
 	"include": ["src/**/*.ts"]
 }

@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "bin/index.js",
 	"scripts": {
-		"start": "ts-node ./src",
+		"start": "node .",
 		"test": "npm run build",
-		"dev": "nodemon"
+		"dev": "nodemon",
+		"build": "tsc"
 	},
 	"repository": {
 		"type": "git",
