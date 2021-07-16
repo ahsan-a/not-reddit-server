@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.set('trust proxy', 1);
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000, // 1 minute
-	max: 20, // limit each IP to 100 requests per windowMs
+	max: parseInt(process.env.rateLimit || '25'), // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
 
