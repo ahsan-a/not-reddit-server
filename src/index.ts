@@ -13,7 +13,7 @@ import routes from './routes';
 
 app.use(
 	cors({
-		origin: process.env.origin || 'http://not-reddit.vercel.app',
+		origin: process.env.origin || 'https://not-reddit.vercel.app',
 		methods: ['GET', 'POST'],
 	})
 );

@@ -22,7 +22,7 @@ router.post('/', async (req, res): Promise<any> => {
 	const notifs = await rtdb.ref(`/notifications/${req.body.user_id}`).get();
 
 	notifs.forEach((notif) => {
-		notif.ref.update({ unread: false });
+		if (notif.val().unread) notif.ref.update({ unread: false });
 	});
 
 	res.send({ success: true });
