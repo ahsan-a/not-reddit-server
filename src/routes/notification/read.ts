@@ -6,7 +6,7 @@ import { verifyValues, Error, verifyLogin } from '../../utils';
 
 router.post('/', async (req, res): Promise<any> => {
 	const error = Error(res);
-	let verifyStatus = verifyValues(req.body, ['id', 'id_token', 'user_id']);
+	let verifyStatus = verifyValues(req.body, ['id_token', 'user_id']);
 	if (!verifyStatus.success) return res.send(verifyStatus);
 
 	const verifiedUser = await verifyLogin(req.body.id_token, req.body.user_id);
@@ -19,8 +19,10 @@ router.post('/', async (req, res): Promise<any> => {
 		}
 	}
 
-	await rtdb.ref(`/notifications/${req.body.user_id}/${req.body.id}`).update({
-		unread: false,
+	const notifs = await rtdb.ref(`/notifications/${req.body.user_id}`).get();
+
+	notifs.forEach((notif) => {
+		notif.ref.update({ unread: false });
 	});
 
 	res.send({ success: true });
