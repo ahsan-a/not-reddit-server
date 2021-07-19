@@ -51,21 +51,10 @@ router.post('/', async (req, res): Promise<any> => {
 		updated_at: firebase.firestore.FieldValue.serverTimestamp(),
 	});
 
-	createNotification({
-		target: post.data()?.user_id,
-		title: `${user.data()?.name} commented on your post`,
-		type: 'interaction',
-		body: `"${(req.body.content as string).length > 128 ? (req.body.content as string).slice(0, 128) + '...' : req.body.content}"`,
-		content_id: comment.id,
-		content_type: 'comment',
-		sent_by: user.data()?.id ?? user.id,
-		url: `/r/${subreddit.data()?.name}/${post.ref.id}`,
-	});
-
-	if (req.body.parent_id && parent && parent.data()?.user_id !== post.data()?.user_id) {
+	if (parent && req.body.user_id !== post.data()?.user_id) {
 		createNotification({
-			target: parent.data()?.user_id,
-			title: `${user.data()?.name} replied to your comment`,
+			target: post.data()?.user_id,
+			title: `${user.data()?.name} commented on your post`,
 			type: 'interaction',
 			body: `"${(req.body.content as string).length > 128 ? (req.body.content as string).slice(0, 128) + '...' : req.body.content}"`,
 			content_id: comment.id,
@@ -73,6 +62,19 @@ router.post('/', async (req, res): Promise<any> => {
 			sent_by: user.data()?.id ?? user.id,
 			url: `/r/${subreddit.data()?.name}/${post.ref.id}`,
 		});
+
+		if (req.body.parent_id && parent && parent.data()?.user_id !== post.data()?.user_id) {
+			createNotification({
+				target: parent.data()?.user_id,
+				title: `${user.data()?.name} replied to your comment`,
+				type: 'interaction',
+				body: `"${(req.body.content as string).length > 128 ? (req.body.content as string).slice(0, 128) + '...' : req.body.content}"`,
+				content_id: comment.id,
+				content_type: 'comment',
+				sent_by: user.data()?.id ?? user.id,
+				url: `/r/${subreddit.data()?.name}/${post.ref.id}`,
+			});
+		}
 	}
 
 	res.send({ success: true });
