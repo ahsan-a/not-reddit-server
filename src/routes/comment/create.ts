@@ -22,7 +22,7 @@ router.post('/', async (req, res): Promise<any> => {
 	// verification
 	if (req.body.content.replace(/\s/g, '').length < 1) return error('Your comment is too short.');
 
-	let parent: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | undefined = undefined;
+	let parent: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData> | null = null;
 
 	if (req.body.parent_id !== null) {
 		parent = await firestore.collection('comments').doc(req.body.parent_id).get();
@@ -63,7 +63,7 @@ router.post('/', async (req, res): Promise<any> => {
 			url: `/r/${subreddit.data()?.name}/${post.ref.id}`,
 		});
 
-		if (req.body.parent_id && parent && parent.data()?.user_id !== post.data()?.user_id) {
+		if (req.body.parent_id && parent.data()?.user_id !== post.data()?.user_id && req.body.user_id !== parent.data()?.user_id) {
 			createNotification({
 				target: parent.data()?.user_id,
 				title: `${user.data()?.name} replied to your comment`,
