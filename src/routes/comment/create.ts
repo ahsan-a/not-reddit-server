@@ -51,7 +51,7 @@ router.post('/', async (req, res): Promise<any> => {
 		updated_at: firebase.firestore.FieldValue.serverTimestamp(),
 	});
 
-	if (parent && req.body.user_id !== post.data()?.user_id) {
+	if (req.body.user_id !== post.data()?.user_id) {
 		createNotification({
 			target: post.data()?.user_id,
 			title: `${user.data()?.name} commented on your post`,
@@ -63,7 +63,7 @@ router.post('/', async (req, res): Promise<any> => {
 			url: `/r/${subreddit.data()?.name}/${post.ref.id}`,
 		});
 
-		if (req.body.parent_id && parent.data()?.user_id !== post.data()?.user_id && req.body.user_id !== parent.data()?.user_id) {
+		if (parent && req.body.parent_id && parent.data()?.user_id !== post.data()?.user_id && req.body.user_id !== parent.data()?.user_id) {
 			createNotification({
 				target: parent.data()?.user_id,
 				title: `${user.data()?.name} replied to your comment`,
