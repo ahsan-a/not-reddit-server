@@ -22,8 +22,6 @@ router.post('/', async (req, res): Promise<any> => {
 				return error('An error occurred.');
 		}
 	}
-	res.send({ success: true });
-
 	cleaning[req.body.user_id] = true;
 
 	const dbNotifs = await rtdb.ref(`/notifications/${req.body.user_id}`).get();
@@ -57,6 +55,7 @@ router.post('/', async (req, res): Promise<any> => {
 	}
 
 	delete cleaning[req.body.user_id];
+	res.send({ success: true });
 });
 
 export default router;

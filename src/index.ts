@@ -7,8 +7,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
-import { createNotification } from './utils';
-
 import routes from './routes';
 
 app.use(
