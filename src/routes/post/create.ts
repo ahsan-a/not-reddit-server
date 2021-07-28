@@ -6,6 +6,7 @@ import { verifyValues, Error, verifyLogin } from '../../utils';
 
 router.post('/', async (req, res): Promise<any> => {
 	const error = Error(res);
+	console.log(req.headers);
 
 	let verifyStatus = verifyValues(req.body, ['title', 'content', 'user_id', 'subreddit_id', 'id_token']);
 	if (!verifyStatus.success) return res.send(verifyStatus);
