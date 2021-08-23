@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.set('trust proxy', 1);
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000, // 1 minute
-	max: parseInt(process.env.rateLimit || '15'), // limit each IP to 100 requests per windowMs
+	max: parseInt(process.env.rateLimit || '6'), // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
 
@@ -33,6 +33,6 @@ app.use(routes);
 
 const port = process.env.PORT || 5000;
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
 	console.log(`Server listening on port ${port}`);
 });
