@@ -2,8 +2,8 @@
 
 ## Roadmap
 
-[x] Creating subreddits
-[x] Creating comments
-[x] Creating posts
-[ ] Deleting comments
-[ ] Updating user info
+- [x] Creating subreddits
+- [x] Creating comments
+- [x] Creating posts
+- [x] Deleting comments
+- [x] Updating user info
